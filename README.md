@@ -19,4 +19,5 @@ A simple Python project to manage student grades using SQLite.
    git clone https://github.com/kurseasy/student-grade-system
    cd student-grade-system
 2. Run the program:
+   ```bash
    python grades.py
