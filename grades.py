@@ -33,7 +33,7 @@ def add_grade(student_id, subject, grade):
     conn.commit()
 
 def list_grades(student_id):
-    cursor.execute("SELECT subject, grade FROM grades WHERE student_id=?", (student_id,))
+    cursor.execute("SELECT id, subject, grade FROM grades WHERE student_id=?", (student_id,))
     return cursor.fetchall()
 
 def average_grade(student_id):
@@ -44,6 +44,15 @@ def list_students():
     cursor.execute("SELECT id, name, group_name FROM students")
     return cursor.fetchall()
 
+def delete_student(student_id):
+    cursor.execute("DELETE FROM students WHERE id=?", (student_id,))
+    cursor.execute("DELETE FROM grades WHERE student_id=?", (student_id,))
+    conn.commit()
+
+def delete_grade(grade_id):
+    cursor.execute("DELETE FROM grades WHERE id=?", (grade_id,))
+    conn.commit()
+
 # меню
 def menu():
     while True:
@@ -53,7 +62,9 @@ def menu():
         print("3. Показать все оценки студента")
         print("4. Показать средний балл студента")
         print("5. Показать всех студентов")
-        print("6. Выход")
+        print("6. Удалить студента")
+        print("7. Удалить оценку")
+        print("8. Выход")
 
         choice = input("Введите номер команды: ")
 
@@ -73,7 +84,9 @@ def menu():
         elif choice == "3":
             student_id = int(input("ID студента: "))
             grades = list_grades(student_id)
-            print("Оценки:", grades)
+            print("Оценки:")
+            for g in grades:
+                print(f"ID оценки: {g[0]}, Предмет: {g[1]}, Оценка: {g[2]}")
 
         elif choice == "4":
             student_id = int(input("ID студента: "))
@@ -87,6 +100,16 @@ def menu():
                 print(f"ID: {s[0]}, Имя: {s[1]}, Группа: {s[2]}")
 
         elif choice == "6":
+            student_id = int(input("ID студента для удаления: "))
+            delete_student(student_id)
+            print("🗑️ Студент и его оценки удалены")
+
+        elif choice == "7":
+            grade_id = int(input("ID оценки для удаления: "))
+            delete_grade(grade_id)
+            print("🗑️ Оценка удалена")
+
+        elif choice == "8":
             print("Выход из программы...")
             break
 
